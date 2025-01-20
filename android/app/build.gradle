@@ -1,0 +1,48 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // O plugin Flutter deve ser o último.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+android {
+    namespace = "com.example.utapatents"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId = "com.example.utapatents"
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.debug
+        }
+    }
+}
+
+dependencies {
+    // Firebase dependencies
+    implementation 'com.google.firebase:firebase-auth:21.0.1'  // Firebase Authentication
+    implementation 'com.google.firebase:firebase-firestore:24.0.3'  // Firestore Database
+
+    // Necessário para o Firebase funcionar
+    implementation 'com.google.gms:google-services:4.3.15' // Versão do Google Services
+}
+
+flutter {
+    source = "../.."
+}

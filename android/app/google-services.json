@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "305918385377",
+    "project_id": "uta-patents",
+    "storage_bucket": "uta-patents.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305918385377:android:616cdfdf8580d7cd912ba0",
+        "android_client_info": {
+          "package_name": "com.example.utapatents"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5bQ4aIpvXCXui39B7DmfqdYUX3Y7ADjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305918385377:android:ea1654540b1fd31f912ba0",
+        "android_client_info": {
+          "package_name": "com.utapatentes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5bQ4aIpvXCXui39B7DmfqdYUX3Y7ADjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305918385377:android:c892bad848443f19912ba0",
+        "android_client_info": {
+          "package_name": "uta.patents"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5bQ4aIpvXCXui39B7DmfqdYUX3Y7ADjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
