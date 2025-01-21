@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.utapatents"
-        minSdk = flutter.minSdkVersion
+        minSdkVersion 23 // Alterado para atender aos requisitos do Firebase
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
