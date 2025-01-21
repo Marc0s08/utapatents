@@ -21,6 +21,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   table_calendar: ^3.2.0
   flutter_local_notifications: ^18.0.1
+  flutter_launcher_icons: ^0.14.3
   
 flutter_local_notifications: ^9.1.4
 table_calendar: ^3.0.9
@@ -35,3 +36,15 @@ dev_dependencies:
 flutter:
   # Garante que os ícones do Material sejam incluídos
   uses-material-design: true
+  assets:
+    - assets/images/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/logo.png"
+  
+fonts:
+    - family: Rye
+      fonts:
+        - asset: assets/fonts/Rye-Regular.ttf

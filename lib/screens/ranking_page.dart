@@ -74,43 +74,64 @@ class RankingPage extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(user['name'] ?? 'Nome não disponível'),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Exibe as informações do usuário (exceto e-mail)
-                                Text('Classe: ${user['class'] ?? 'Classe não definida'}'),
-                                Text('Data de Nascimento: ${user['dob'] ?? 'Data de nascimento não disponível'}'),
-                                Text('Patente: $rank'),
-                                SizedBox(height: 10),
-                                // Exibe a foto de perfil, se houver
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: user['photoURL'] != null
-                                      ? Image.network(
-                                          user['photoURL'],
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Icon(
-                                          Icons.person,
-                                          size: 100,
-                                          color: Colors.grey,
-                                        ),
+                          return Dialog(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/multicam_black.jpg'), // Caminho do fundo
+                                  fit: BoxFit.cover,
                                 ),
-                              ],
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Fechar'),
                               ),
-                            ],
+                              padding: EdgeInsets.all(16.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Nome do usuário
+                                  Text(
+                                    user['name'] ?? 'Nome não disponível',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white, // Contraste com o fundo
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  // Informações adicionais
+                                  Text(
+                                    'Classe: ${user['class'] ?? 'Classe não definida'}',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Text(
+                                    'Data de Nascimento: ${user['dob'] ?? 'Data de nascimento não disponível'}',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Text(
+                                    'Patente: $rank',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  SizedBox(height: 10),
+                                  // Foto de perfil
+                                  Center(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: user['photoURL'] != null
+                                          ? Image.network(
+                                              user['photoURL'],
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Icon(
+                                              Icons.person,
+                                              size: 100,
+                                              color: Colors.grey,
+                                            ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         },
                       );

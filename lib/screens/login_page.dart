@@ -25,6 +25,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Define a cor com base no tema
+    Color textColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white // Cor do texto no tema escuro
+        : Colors.black; // Cor do texto no tema claro
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
@@ -40,7 +45,31 @@ class _LoginPageState extends State<LoginPage> {
       body: Padding(
         padding: EdgeInsets.all(20),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // Centraliza os elementos na tela
+          crossAxisAlignment: CrossAxisAlignment.center, // Centraliza horizontalmente
           children: [
+            // Imagem centralizada
+            Center(
+              child: Image.asset(
+                'assets/images/log.png', // Caminho da imagem
+                width: MediaQuery.of(context).size.width * 0.5, // 50% da largura da tela
+                height: MediaQuery.of(context).size.height * 0.2, // 20% da altura da tela
+                fit: BoxFit.contain, // Mantém a proporção da imagem
+              ),
+            ),
+            SizedBox(height: 40), // Espaço entre a imagem e o texto
+            // Texto entre a imagem e os campos de login
+            Text(
+              'UNIDADE TÁTICA AIRSOFT', // O texto que você deseja exibir
+              style: TextStyle(
+                fontFamily: 'Rye', // Aplica a fonte Rye
+                fontSize: 28, // Tamanho da fonte
+                fontWeight: FontWeight.bold,
+                color: textColor, // Altera a cor com base no tema
+              ),
+              textAlign: TextAlign.center, // Alinha o texto no centro
+            ),
+            SizedBox(height: 40), // Espaço entre o texto e os campos de login
             TextField(
               controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),

@@ -11,7 +11,19 @@ class _HomePageState extends State<HomePage> {
   final User? user = FirebaseAuth.instance.currentUser;
   Map<String, dynamic>? userData;
 
-  // Define as faixas de pontos para as patentes
+  final List<String> ranks = [
+    'Recruta',
+    'Aspirante',
+    'Soldado',
+    'Sargento',
+    'Tenente',
+    'Capitão',
+    'Comandante',
+    'Coronel',
+    'General',
+    'Marechal'
+  ];
+
   final Map<String, Map<String, int>> rankRanges = {
     'Marechal': {'min': 1000, 'max': 10000},
     'General': {'min': 801, 'max': 999},
@@ -51,48 +63,56 @@ class _HomePageState extends State<HomePage> {
   }
 
   String getCurrentRank(int points) {
-    for (var rank in rankRanges.keys) {
+    for (var rank in ranks) {
       if (points >= rankRanges[rank]!['min']! && points <= rankRanges[rank]!['max']!) {
         return rank;
       }
     }
-    return 'Recruta'; // Se nenhum rank corresponder, retorna "Recruta"
+    return 'Recruta';
   }
 
   String getNextRank(int points) {
-    List<String> ranks = rankRanges.keys.toList();
+    String currentRank = getCurrentRank(points);
+    int currentRankIndex = ranks.indexOf(currentRank);
 
-    // Se o usuário estiver no maior rank, a próxima patente será o primeiro rank
-    if (points >= rankRanges[ranks.first]!['min']!) {
-      return 'Marechal'; // O maior rank
+    // Verifica se já estamos na última patente
+    if (currentRankIndex == ranks.length - 1) {
+      return ranks[currentRankIndex]; // Última patente, não há próxima
     }
 
-    // Itera pelas patentes para encontrar a próxima
-    for (int i = 0; i < ranks.length; i++) {
-      if (points >= rankRanges[ranks[i]]!['min']! && points < rankRanges[ranks[i]]!['max']!) {
-        // A próxima patente será a seguinte na lista
-        return i + 1 < ranks.length ? ranks[i + 1] : ranks[i];
-      }
-    }
-    return 'Recruta'; // Caso não caia em nenhum rank, retorna "Recruta"
+    // Retorna a próxima patente na lista
+    return ranks[currentRankIndex + 1];
   }
 
   @override
   Widget build(BuildContext context) {
-    int points = userData?['points'] ?? 0; // Obtém os pontos do usuário (caso não tenha, define como 0)
+    int points = userData?['points'] ?? 0;
     String currentRank = getCurrentRank(points);
     String nextRank = getNextRank(points);
 
-    // Calcula a barra de progresso com base na patente atual
-    double progress = 0.0;
+    // Obtém os valores mínimo e máximo de pontos da patente atual
     int rankMin = rankRanges[currentRank]!['min']!;
     int rankMax = rankRanges[currentRank]!['max']!;
-    if (rankMax > rankMin) {
-      progress = (points - rankMin) / (rankMax - rankMin); // Calcula a porcentagem dentro da faixa da patente
-    }
+    
+    double progress = 0.0;
 
-    // Limita o progresso para não ultrapassar 1
-    progress = progress > 1 ? 1 : progress;
+    // Se o ponto máximo da patente for maior que o mínimo
+    if (rankMax > rankMin) {
+      // Calcula a porcentagem de progresso do usuário dentro do intervalo da patente
+      progress = (points - rankMin) / (rankMax - rankMin);
+      
+      // Garante que o valor da barra não ultrapasse 1.0 (100%)
+      if (progress > 1.0) {
+        progress = 1.0;
+      }
+      // Garante que o valor da barra não seja menor que 0
+      else if (progress < 0.0) {
+        progress = 0.0;
+      }
+    } else {
+      // Se o ponto máximo for igual ao mínimo (Recruta), a barra fica em 0
+      progress = 0.0;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -116,10 +136,9 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.deepPurple, Colors.purpleAccent],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/multicam_black.jpg'), // Adicione a imagem no diretório assets/images/
+                    fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
@@ -135,12 +154,11 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Foto de perfil
                     ClipRRect(
                       borderRadius: BorderRadius.circular(60),
-                      child: userData!['photoURL'] != null
+                      child: userData!['profile_picture'] != null
                           ? Image.network(
-                              userData!['photoURL'],
+                              userData!['profile_picture'], // Campo correto para a foto de perfil
                               width: 120,
                               height: 120,
                               fit: BoxFit.cover,
@@ -152,7 +170,6 @@ class _HomePageState extends State<HomePage> {
                             ),
                     ),
                     SizedBox(height: 20),
-                    // Nome do operador
                     Text(
                       userData!['name'] ?? 'Nome não disponível',
                       style: TextStyle(
@@ -162,7 +179,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    // Classe do operador
                     Text(
                       'Classe: ${userData!['class'] ?? 'Classe não definida'}',
                       style: TextStyle(
@@ -171,7 +187,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    // Data de nascimento
                     Text(
                       'Data de Nascimento: ${userData!['dob'] ?? 'Data de nascimento não disponível'}',
                       style: TextStyle(
@@ -179,17 +194,7 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.white70,
                       ),
                     ),
-                    SizedBox(height: 10),
-                    // Email
-                    Text(
-                      'Email: ${user?.email ?? 'Email não disponível'}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white70,
-                      ),
-                    ),
                     SizedBox(height: 20),
-                    // Barra de progresso e patente
                     LinearProgressIndicator(
                       value: progress,
                       backgroundColor: Colors.grey[300],
@@ -197,7 +202,6 @@ class _HomePageState extends State<HomePage> {
                       minHeight: 10,
                     ),
                     SizedBox(height: 10),
-                    // Exibindo patente atual e próxima com destaque
                     Text(
                       'Patente Atual: $currentRank',
                       style: TextStyle(
@@ -214,26 +218,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Spacer(),
-                    // Botão de Sair com animação
-                    ElevatedButton(
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.redAccent, // Corrigido de 'primary' para 'backgroundColor'
-    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 32),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(30),
-    ),
-    elevation: 5,
-  ),
-  onPressed: () {
-    FirebaseAuth.instance.signOut();
-    Navigator.pushReplacementNamed(context, '/login');
-  },
-  child: Text(
-    'Sair',
-    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-  ),
-),
-
                   ],
                 ),
               ),
